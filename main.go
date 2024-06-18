@@ -28,8 +28,8 @@ func init() {
 }
 func main() {
 	p := &constant.Param{
-		Root:     "/Users/zen/Github/FastYt-dlp",
-		Language: "ja",
+		Root:     "/Users/zen/Github/FastYt-dlp/eu",
+		Language: "Russian",
 		Pattern:  "mp4",
 		Model:    "base",
 		Location: "/Users/zen/Github/FastYt-dlp",

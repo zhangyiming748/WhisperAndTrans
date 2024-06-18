@@ -2,7 +2,7 @@ package constant
 
 type Param struct {
 	Root     string // 视频文件位置
-	Language string // 视频文件语言
+	Language string // 视频文件语言 English German Russian Japanese Korean Spanish French
 	Pattern  string //视频扩展名
 	Model    string //whisper 所使用的模型等级 large
 	Location string //whisper 模型保存的位置 如果为空保存在视频文件夹
