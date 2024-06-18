@@ -35,6 +35,25 @@ func main() {
 		Location: "/Users/zen/Github/FastYt-dlp",
 		Proxy:    "192.168.1.20:8889",
 	}
+	if root := os.Getenv("root"); root != "" {
+		p.SetRoot(root)
+	}
+	if language := os.Getenv("language"); language != "" {
+		p.SetLanguage(language)
+	}
+	if pattern := os.Getenv("pattern"); pattern != "" {
+		p.SetPattern(pattern)
+	}
+	if model := os.Getenv("model"); model != "" {
+		p.SetModel(model)
+	}
+	if location := os.Getenv("location"); location != "" {
+		p.SetLocation(location)
+	}
+	if proxy := os.Getenv("proxy"); proxy != "" {
+		p.SetProxy(proxy)
+	}
+
 	c := new(constant.Count)
 	defer func() {
 		log.Printf("\r从bing获取:%d条\n从google获取:%d条\n从deeplx获取:%d条\n从cache获取:%d条\n", c.GetBing(), c.GetGoogle(), c.GetDeeplx(), c.GetCache())
