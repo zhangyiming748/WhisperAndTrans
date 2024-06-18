@@ -44,7 +44,12 @@ func SetSensitive(p *constant.Param) {
 		after := strings.Split(line, ":")[1]
 		log.Printf("写入敏感词:\tbefore:%v\tafter:%v\n", before, after)
 		Sensitive[before] = after
-		sql.GetDatabase().Hash().Set("sensitive", before, after)
+		set, err := sql.GetDatabase().Hash().Set("sensitive", before, after)
+		if err != nil {
+			log.Println("敏感词写入数据库失败")
+		} else {
+			log.Printf("敏感词%v写入数据库成功\n", set)
+		}
 	}
 }
 
