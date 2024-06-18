@@ -39,7 +39,7 @@ func Translate(src string, p *constant.Param, c *constant.Count) (dst string) {
 			dst = result.Dst
 		case <-time.After(TIMEOUT * time.Second):
 			dst = DeepXl(src)
-			log.Printf("trans超时,使用deepXL翻译结果:%v\n", dst)
+			log.Printf("trans超时,使用本地deepXL翻译结果:%v\n", dst)
 			c.SetDeeplx()
 		}
 		if dst != "" {

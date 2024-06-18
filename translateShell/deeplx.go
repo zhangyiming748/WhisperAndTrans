@@ -3,6 +3,7 @@ package translateShell
 import (
 	"WhisperAndTrans/util"
 	"encoding/json"
+	"log"
 )
 
 /*
@@ -16,24 +17,29 @@ curl --location 'https://api.deeplx.org/translate' \
 	}'
 */
 type ans struct {
-	Code         int      `json:"code"`
-	Id           int64    `json:"id"`
-	Data         string   `json:"data"`
 	Alternatives []string `json:"alternatives"`
+	Code         int      `json:"code"`
+	Data         string   `json:"data"`
+	Id           int64    `json:"id"`
+	Method       string   `json:"method"`
+	SourceLang   string   `json:"source_lang"`
+	TargetLang   string   `json:"target_lang"`
 }
 
 func DeepXl(src string) string {
-	uri := "https://api.deeplx.org/translate"
-	headers := map[string]string{
-		"content-type": "application/json",
-	}
+	uri := "http://192.168.1.6:1188/translate"
 	data := map[string]string{
 		"text":        src,
 		"source_lang": "auto",
 		"target_lang": "ZH",
 	}
-	b, _ := util.HttpPostJson(headers, data, uri)
+	b, _ := util.HttpPostJson(nil, data, uri)
+
 	var a ans
+
 	json.Unmarshal(b, &a)
+	if a.Data == "" {
+		log.Fatalln("翻译结果为空,是否开启了全局代理")
+	}
 	return a.Data
 }
