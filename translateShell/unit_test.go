@@ -2,6 +2,7 @@ package translateShell
 
 import (
 	"fmt"
+	"github.com/zhangyiming748/DeepLX"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -9,10 +10,10 @@ import (
 )
 
 // go test -v -run TestTranslate
-func TestDeepXl(t *testing.T) {
-	ret := DeepXl("hello,world")
-	t.Log(ret)
-}
+//func TestDeepXl(t *testing.T) {
+//	ret := DeepXl("hello,world")
+//	t.Log(ret)
+//}
 
 func TestMaster(t *testing.T) {
 
@@ -48,4 +49,12 @@ func TestMaster(t *testing.T) {
 		return
 	}
 	fmt.Println(string(body))
+}
+func TestDeepLX(t *testing.T) {
+	lx, err := DeepLx.TranslateByDeepLX("auto", "zh", "hello world", "")
+	if err != nil {
+		return
+	} else {
+		t.Log(lx)
+	}
 }

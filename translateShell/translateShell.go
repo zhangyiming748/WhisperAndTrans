@@ -3,6 +3,7 @@ package translateShell
 import (
 	"WhisperAndTrans/constant"
 	"WhisperAndTrans/replace"
+	"github.com/zhangyiming748/DeepLX"
 	"log"
 	"sync"
 	"time"
@@ -38,7 +39,7 @@ func Translate(src string, p *constant.Param, c *constant.Count) (dst string) {
 			}
 			dst = result.Dst
 		case <-time.After(TIMEOUT * time.Second):
-			dst = DeepXl(src)
+			dst, _ = DeepLx.TranslateByDeepLX("auto", "zh", src, "")
 			log.Printf("trans超时,使用本地deepXL翻译结果:%v\n", dst)
 			c.SetDeeplx()
 		}
