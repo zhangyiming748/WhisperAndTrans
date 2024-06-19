@@ -1,6 +1,10 @@
 # WhisperAndTrans
+
 使用openai-whisper生成字幕后自动翻译
+
 # usage
-```bash
-docker run -dit --name wta -v /Users/zen/Github/FastYt-dlp:/data -e root=/data -e language=en -e pattern=mkv -e model=large -e location=/data -e 'proxy=192.168.1.20:8889' whisperandtrans:latest
-```
+
+1. [安装docker](https://docs.docker.com/engine/install/binaries/)
+2. 根据自己的文件位置修改`docker-compose.yml`
+3. 使用命令`docker compose up -d`运行容器
+4. 等待一条龙服务完成
