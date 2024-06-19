@@ -28,12 +28,12 @@ func init() {
 }
 func main() {
 	p := &constant.Param{
-		Root:     "/Users/zen/Github/FastYt-dlp/eu",
-		Language: "Russian",
+		Root:     "/Volumes/Ventoy/joi",
+		Language: "English",
 		Pattern:  "mp4",
 		Model:    "base",
 		Location: "/Users/zen/Github/FastYt-dlp",
-		Proxy:    "192.168.1.20:8889",
+		Proxy:    "127.0.0.1:8889",
 	}
 	if root := os.Getenv("root"); root != "" {
 		p.SetRoot(root)
