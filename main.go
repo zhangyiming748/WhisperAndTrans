@@ -28,7 +28,7 @@ func init() {
 }
 func main() {
 	p := &constant.Param{
-		Root:     "/Volumes/Ventoy/joi",
+		Root:     "/Volumes/Ventoy",
 		Language: "English",
 		Pattern:  "mp4",
 		Model:    "base",
