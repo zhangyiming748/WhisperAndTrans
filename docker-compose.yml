@@ -13,4 +13,4 @@ services:
       - model=large
       - location=/data
       - proxy=192.168.1.20:8889
-    image: whisperandtrans:latest
+    image: zhangyiming748/whisperandtrans:latest
