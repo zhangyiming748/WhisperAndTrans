@@ -7,10 +7,10 @@ COPY debian.sources /etc/apt/sources.list.d/
 RUN apt update
 RUN apt install -y python3 python3-pip translate-shell ffmpeg ca-certificates bsdmainutils sqlite3 gawk locales libfribidi-bin dos2unix
 # 配置pip
-RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+# RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 # 安装openai-whisper
 RUN rm /usr/lib/python3.11/EXTERNALLY-MANAGED
-RUN pip install openai-whisper
+RUN pip install openai-whisper --break-system-packages
 # 复制go程序
 RUN mkdir /app
 WORKDIR /app
