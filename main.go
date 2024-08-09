@@ -32,7 +32,7 @@ func main() {
 		Language: "English",
 		Pattern:  "mp4",
 		Model:    "large-v3",
-		Location: "data",
+		Location: "/data",
 		Proxy:    "",
 	}
 	if root := os.Getenv("root"); root != "" {
@@ -83,8 +83,8 @@ func main() {
 				if i+3 > len(before) {
 					continue
 				}
-				after.WriteString(fmt.Sprintf("%s\n", before[i]))
-				after.WriteString(fmt.Sprintf("%s\n", before[i+1]))
+				_, _ = after.WriteString(fmt.Sprintf("%s\n", before[i]))
+				_, _ = after.WriteString(fmt.Sprintf("%s\n", before[i+1]))
 				src := before[i+2]
 
 				afterSrc := replace.GetSensitive(src)
@@ -111,16 +111,16 @@ func main() {
 					}
 				}
 				dst = replace.GetSensitive(dst)
-				sql.GetDatabase().Hash().Set("translations", src, dst)
+				_, _ = sql.GetDatabase().Hash().Set("translations", src, dst)
 				log.Printf("文件名:%v\n原文:%v\n译文:%v\n", tmpname, src, dst)
-				after.WriteString(fmt.Sprintf("%s\n", src))
-				after.WriteString(fmt.Sprintf("%s\n", dst))
-				after.WriteString(fmt.Sprintf("%s\n", before[i+3]))
-				after.Sync()
+				_, _ = after.WriteString(fmt.Sprintf("%s\n", src))
+				_, _ = after.WriteString(fmt.Sprintf("%s\n", dst))
+				_, _ = after.WriteString(fmt.Sprintf("%s\n", before[i+3]))
+				_ = after.Sync()
 			}
 			origin := strings.Join([]string{strings.Replace(srt, ".srt", "", 1), "_origin", ".srt"}, "")
-			exec.Command("cp", srt, origin).CombinedOutput()
-			os.Rename(tmpname, srt)
+			_, _ = exec.Command("cp", srt, origin).CombinedOutput()
+			_ = os.Rename(tmpname, srt)
 		}
 	}
 }
