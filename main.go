@@ -31,9 +31,9 @@ func main() {
 		Root:     "/data",
 		Language: "English",
 		Pattern:  "mp4",
-		Model:    "base",
-		Location: "/data",
-		Proxy:    "127.0.0.1:8889",
+		Model:    "large-v3",
+		Location: "data",
+		Proxy:    "",
 	}
 	if root := os.Getenv("root"); root != "" {
 		p.SetRoot(root)
