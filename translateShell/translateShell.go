@@ -91,7 +91,11 @@ func Translate(src string, p *constant.Param, c *constant.Count) (dst string) {
 	retry := 0
 	if p.GetProxy() == "" {
 		fmt.Println("富强|民主|文明|和谐|自由|平等|公正|法治|爱国|敬业|诚信|友善")
-		dst, _ = DeepLx.TranslateByDeepLX("auto", "zh", src, "")
+		if word, err := DeepLx.TranslateByDeepLX("auto", "zh", src, ""); err != nil {
+			log.Fatalf("DeepLx查询出错:%v\n", err)
+		} else {
+			dst = word
+		}
 	} else {
 		for {
 			go TransByGoogle(proxy, language, src, ch, c, &once)
