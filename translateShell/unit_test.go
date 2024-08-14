@@ -2,6 +2,7 @@ package translateShell
 
 import (
 	"WhisperAndTrans/constant"
+	"WhisperAndTrans/sql"
 	"fmt"
 	"github.com/zhangyiming748/DeepLX"
 	"io"
@@ -60,15 +61,16 @@ func TestDeepLX(t *testing.T) {
 	}
 }
 
+// go test -v -run TestTrans
 func TestTrans(t *testing.T) {
-	f := "E:\\video\\cod2.srt"
+	f := "/mnt/e/video/cod2.srt"
 	p := constant.Param{
-		Root:     "",
+		Root:     "/mnt/e/video",
 		Language: "",
-		Pattern:  "",
+		Pattern:  "srt",
 		Model:    "",
 		Location: "",
-		Proxy:    "",
+		Proxy:    "192.168.1.20:8889",
 	}
 	c := constant.Count{
 		Bing:   0,
@@ -76,5 +78,6 @@ func TestTrans(t *testing.T) {
 		Deeplx: 0,
 		Cache:  0,
 	}
+	sql.SetLevelDB(&p)
 	Trans(f, &p, &c)
 }

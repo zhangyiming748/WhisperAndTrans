@@ -13,6 +13,7 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -47,9 +48,9 @@ func Trans(file string, p *constant.Param, c *constant.Count) {
 
 		var dst string
 
-		if get, err := sql.GetDatabase().Hash().Get("translations", src); err == nil {
-			dst = get.String()
-			fmt.Println("find in cache")
+		if val, err := sql.GetLevelDB().Get([]byte(src), nil); err == nil {
+			dst = string(val)
+			fmt.Println("在缓存中找到")
 			c.SetCache()
 		} else {
 			dst = Translate(afterSrc, p, c)
@@ -67,7 +68,9 @@ func Trans(file string, p *constant.Param, c *constant.Count) {
 			}
 		}
 		dst = replace.GetSensitive(dst)
-		_, _ = sql.GetDatabase().Hash().Set("translations", src, dst)
+		if err := sql.GetLevelDB().Put([]byte(src), []byte(dst), nil); err != nil {
+			log.Printf("缓存写入数据库错误:%v\n", err)
+		}
 		log.Printf("文件名:%v\n原文:%v\n译文:%v\n", tmpname, src, dst)
 		_, _ = after.WriteString(fmt.Sprintf("%s\n", src))
 		_, _ = after.WriteString(fmt.Sprintf("%s\n", dst))
@@ -81,46 +84,44 @@ func Trans(file string, p *constant.Param, c *constant.Count) {
 }
 func Translate(src string, p *constant.Param, c *constant.Count) (dst string) {
 	//trans -brief ja:zh "私の手の動きに合わせて|そう"
-	//ch := make(chan Result)
-	//var once sync.Once
-	//proxy := p.GetProxy()
-	//language := ":zh-CN"
-	//retry := 0
-	//if p.GetProxy() == "" {
-	fmt.Println("富强|民主|文明|和谐")
-	fmt.Println("自由|平等|公正|法治")
-	fmt.Println("爱国|敬业|诚信|友善")
-	dst, _ = DeepLx.TranslateByDeepLX("auto", "zh", src, "")
-	//} else {
-	//	for {
-	//		go TransByGoogle(proxy, language, src, ch, c, &once)
-	//		go TransByBing(proxy, language, src, ch, c, &once)
-	//		//使用同一个通道 传递结构体 标明来源
-	//		var result Result
-	//		select {
-	//		case result = <-ch:
-	//			if result.From == "google" {
-	//				c.SetGoogle()
-	//			} else if result.From == "bing" {
-	//				c.SetBing()
-	//			}
-	//			dst = result.Dst
-	//		case <-time.After(TIMEOUT * time.Second):
-	//			dst, _ = DeepLx.TranslateByDeepLX("auto", "zh", src, "")
-	//			log.Printf("trans超时,使用本地deepXL翻译结果:%v\n", dst)
-	//			c.SetDeeplx()
-	//		}
-	//		if dst != "" {
-	//			break
-	//		} else {
-	//			retry++
-	//			log.Printf("查询结果为空retry:%v\n", retry)
-	//		}
-	//		if retry >= 3 {
-	//			break
-	//		}
-	//	}
-	//}
+	ch := make(chan Result)
+	var once sync.Once
+	proxy := p.GetProxy()
+	language := ":zh-CN"
+	retry := 0
+	if p.GetProxy() == "" {
+		fmt.Println("富强|民主|文明|和谐|自由|平等|公正|法治|爱国|敬业|诚信|友善")
+		dst, _ = DeepLx.TranslateByDeepLX("auto", "zh", src, "")
+	} else {
+		for {
+			go TransByGoogle(proxy, language, src, ch, c, &once)
+			go TransByBing(proxy, language, src, ch, c, &once)
+			//使用同一个通道 传递结构体 标明来源
+			var result Result
+			select {
+			case result = <-ch:
+				if result.From == "google" {
+					c.SetGoogle()
+				} else if result.From == "bing" {
+					c.SetBing()
+				}
+				dst = result.Dst
+			case <-time.After(TIMEOUT * time.Second):
+				dst, _ = DeepLx.TranslateByDeepLX("auto", "zh", src, "")
+				log.Printf("trans超时,使用本地deepXL翻译结果:%v\n", dst)
+				c.SetDeeplx()
+			}
+			if dst != "" {
+				break
+			} else {
+				retry++
+				log.Printf("查询结果为空retry:%v\n", retry)
+			}
+			if retry >= 3 {
+				break
+			}
+		}
+	}
 	dst = replace.ChinesePunctuation(dst)
 	dst = replace.Hans(dst)
 	return dst
