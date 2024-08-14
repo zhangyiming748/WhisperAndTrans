@@ -1,9 +1,10 @@
 package translateShell
 
 import (
+	"WhisperAndTrans/constant"
 	"fmt"
 	"github.com/zhangyiming748/DeepLX"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 	"testing"
@@ -15,7 +16,7 @@ import (
 //	t.Log(ret)
 //}
 
-func TestMaster(t *testing.T) {
+func TestWeb(t *testing.T) {
 
 	url := "http://192.168.1.6:1188/translate"
 	method := "POST"
@@ -43,7 +44,7 @@ func TestMaster(t *testing.T) {
 	}
 	defer res.Body.Close()
 
-	body, err := ioutil.ReadAll(res.Body)
+	body, err := io.ReadAll(res.Body)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -57,4 +58,23 @@ func TestDeepLX(t *testing.T) {
 	} else {
 		t.Log(lx)
 	}
+}
+
+func TestTrans(t *testing.T) {
+	f := "E:\\video\\cod2.srt"
+	p := constant.Param{
+		Root:     "",
+		Language: "",
+		Pattern:  "",
+		Model:    "",
+		Location: "",
+		Proxy:    "",
+	}
+	c := constant.Count{
+		Bing:   0,
+		Google: 0,
+		Deeplx: 0,
+		Cache:  0,
+	}
+	Trans(f, &p, &c)
 }
