@@ -54,7 +54,7 @@ func main() {
 	}()
 
 	mylog.SetLog(p)
-	sql.Initial(p)
+	sql.SetLevelDB(p)
 	replace.SetSensitive(p)
 	files, _ := util.GetAllFileInfoFast(p.GetRoot(), p.GetPattern())
 	for _, file := range files {

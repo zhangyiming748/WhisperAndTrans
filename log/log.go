@@ -3,6 +3,10 @@ package log
 import "WhisperAndTrans/constant"
 import (
 	"github.com/zhangyiming748/lumberjack"
+	"io"
+	"log"
+	"os"
+	"strings"
 )
 
 func SetLog(p *constant.Param) {

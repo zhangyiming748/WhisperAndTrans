@@ -4,3 +4,4 @@ go.work.sum
 .idea
 vendor
 /sensitive.txt
+*.pt
